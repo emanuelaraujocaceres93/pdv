@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
+import Link from 'next/link'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -56,23 +57,30 @@ export default function DashboardPage() {
         </div>
       </div>
       
-      <div className="grid md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
-          <p className="text-gray-500">Produtos</p>
-          <p className="text-3xl font-bold text-green-600">{stats.produtos}</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500">
-          <p className="text-gray-500">Comandas Abertas</p>
-          <p className="text-3xl font-bold text-amber-600">{stats.comandasAbertas}</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
-          <p className="text-gray-500">Vendas Hoje</p>
-          <p className="text-3xl font-bold text-blue-600">R$ {stats.vendasHoje.toFixed(2)}</p>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
-          <p className="text-gray-500">Estoque Baixo</p>
-          <p className="text-3xl font-bold text-red-600">{stats.produtosEstoqueBaixo}</p>
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <Link href="/produtos" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-green-500 hover:shadow-lg transition cursor-pointer block">
+          <p className="text-gray-500 text-sm md:text-base">Produtos</p>
+          <p className="text-2xl md:text-3xl font-bold text-green-600">{stats.produtos}</p>
+          <p className="text-xs text-gray-400 mt-2">Ver todos →</p>
+        </Link>
+        
+        <Link href="/comandas" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-amber-500 hover:shadow-lg transition cursor-pointer block">
+          <p className="text-gray-500 text-sm md:text-base">Comandas Abertas</p>
+          <p className="text-2xl md:text-3xl font-bold text-amber-600">{stats.comandasAbertas}</p>
+          <p className="text-xs text-gray-400 mt-2">Gerenciar →</p>
+        </Link>
+        
+        <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-blue-500 hover:shadow-lg transition cursor-pointer block">
+          <p className="text-gray-500 text-sm md:text-base">Vendas Hoje</p>
+          <p className="text-2xl md:text-3xl font-bold text-blue-600">R$ {stats.vendasHoje.toFixed(2)}</p>
+          <p className="text-xs text-gray-400 mt-2">Ver caixa →</p>
+        </Link>
+        
+        <Link href="/produtos?estoque=baixo" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-red-500 hover:shadow-lg transition cursor-pointer block">
+          <p className="text-gray-500 text-sm md:text-base">Estoque Baixo</p>
+          <p className="text-2xl md:text-3xl font-bold text-red-600">{stats.produtosEstoqueBaixo}</p>
+          <p className="text-xs text-gray-400 mt-2">Reabastecer →</p>
+        </Link>
       </div>
     </div>
   )
