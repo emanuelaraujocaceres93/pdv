@@ -1,3 +1,7 @@
+﻿'use client'
+
+import MenuLayout from '../MenuLayout'
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -20,7 +24,7 @@ interface VendaItem {
   products: { name: string }
 }
 
-export default function CaixaPage() {
+export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayout>; } function Conteudo() { return CaixaPage() {
   const [vendas, setVendas] = useState<Venda[]>([])
   const [vendaSelecionada, setVendaSelecionada] = useState<Venda | null>(null)
   const [itensVenda, setItensVenda] = useState<VendaItem[]>([])
@@ -49,10 +53,10 @@ export default function CaixaPage() {
 
   function formatarPagamento(method: string) {
     const methods: Record<string, string> = {
-      dinheiro: '💵 Dinheiro',
-      cartao_credito: '💳 Cartão Crédito',
-      cartao_debito: '💳 Cartão Débito',
-      pix: '📱 PIX'
+      dinheiro: 'ðŸ’µ Dinheiro',
+      cartao_credito: 'ðŸ’³ CartÃ£o CrÃ©dito',
+      cartao_debito: 'ðŸ’³ CartÃ£o DÃ©bito',
+      pix: 'ðŸ“± PIX'
     }
     return methods[method] || method
   }
@@ -67,31 +71,31 @@ export default function CaixaPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-amber-800 mb-6">💰 Caixa</h1>
+      <h1 className="text-3xl font-bold text-amber-800 mb-6">ðŸ’° Caixa</h1>
       
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Resumo do Dia */}
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">📊 Resumo do Dia</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">ðŸ“Š Resumo do Dia</h2>
           <div className="space-y-3">
             <div className="flex justify-between items-center py-2 border-b border-gray-100">
               <span className="text-gray-600">Total de Vendas:</span>
               <span className="font-bold text-green-600 text-xl">R$ {totalVendas.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100">
-              <span className="text-gray-600">💵 Dinheiro:</span>
+              <span className="text-gray-600">ðŸ’µ Dinheiro:</span>
               <span className="font-medium">R$ {totalDinheiro.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100">
-              <span className="text-gray-600">💳 Cartão Crédito:</span>
+              <span className="text-gray-600">ðŸ’³ CartÃ£o CrÃ©dito:</span>
               <span className="font-medium">R$ {totalCartaoCredito.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100">
-              <span className="text-gray-600">💳 Cartão Débito:</span>
+              <span className="text-gray-600">ðŸ’³ CartÃ£o DÃ©bito:</span>
               <span className="font-medium">R$ {totalCartaoDebito.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-gray-100">
-              <span className="text-gray-600">📱 PIX:</span>
+              <span className="text-gray-600">ðŸ“± PIX:</span>
               <span className="font-medium">R$ {totalPix.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center py-3 bg-amber-50 rounded-lg px-4 -mx-4 mt-3">
@@ -101,9 +105,9 @@ export default function CaixaPage() {
           </div>
         </div>
 
-        {/* Últimas Vendas */}
+        {/* Ãšltimas Vendas */}
         <div className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">📋 Últimas Vendas</h2>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">ðŸ“‹ Ãšltimas Vendas</h2>
           <div className="space-y-2 max-h-[400px] overflow-y-auto">
             {vendas.length === 0 ? (
               <p className="text-gray-400 text-center py-8">Nenhuma venda registrada</p>
@@ -135,7 +139,7 @@ export default function CaixaPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto m-4">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-amber-800">🧾 Detalhes da Venda</h2>
+              <h2 className="text-2xl font-bold text-amber-800">ðŸ§¾ Detalhes da Venda</h2>
               <button onClick={() => { setVendaSelecionada(null); setItensVenda([]) }} className="text-gray-500 hover:text-gray-700 text-3xl leading-none">&times;</button>
             </div>
             
@@ -154,7 +158,7 @@ export default function CaixaPage() {
               </div>
             </div>
             
-            <h3 className="font-bold text-lg mb-3 text-gray-700">🛒 Produtos</h3>
+            <h3 className="font-bold text-lg mb-3 text-gray-700">ðŸ›’ Produtos</h3>
             <div className="space-y-2">
               {itensVenda.map(item => (
                 <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -173,4 +177,4 @@ export default function CaixaPage() {
       )}
     </div>
   )
-}
+} }

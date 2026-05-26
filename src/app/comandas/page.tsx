@@ -1,3 +1,7 @@
+﻿'use client'
+
+import MenuLayout from '../MenuLayout'
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -27,7 +31,7 @@ interface ItemComanda {
   products: { name: string; price: number }
 }
 
-export default function ComandasPage() {
+export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayout>; } function Conteudo() { return ComandasPage() {
   const router = useRouter()
   const [comandas, setComandas] = useState<Comanda[]>([])
   const [loading, setLoading] = useState(true)
@@ -66,7 +70,7 @@ export default function ComandasPage() {
 
   async function criarComanda() {
     if (!novaMesa.trim()) { 
-      alert('Digite o número da mesa ou nome do cliente') 
+      alert('Digite o nÃºmero da mesa ou nome do cliente') 
       return 
     }
     
@@ -133,7 +137,7 @@ export default function ComandasPage() {
 
   async function abrirModalPagamento() {
     if (itens.length === 0) { 
-      alert('Adicione produtos à comanda primeiro!') 
+      alert('Adicione produtos Ã  comanda primeiro!') 
       return 
     }
     setModalPagamento(true)
@@ -187,12 +191,12 @@ export default function ComandasPage() {
     
     const pagamentoNome = {
       dinheiro: 'Dinheiro',
-      cartao_credito: 'Cartão Crédito',
-      cartao_debito: 'Cartão Débito',
+      cartao_credito: 'CartÃ£o CrÃ©dito',
+      cartao_debito: 'CartÃ£o DÃ©bito',
       pix: 'PIX'
     }[pagamentoSelecionado]
     
-    alert('✅ Venda finalizada!\nTotal: R$ ' + comanda.total.toFixed(2) + '\nPagamento: ' + pagamentoNome)
+    alert('âœ… Venda finalizada!\nTotal: R$ ' + comanda.total.toFixed(2) + '\nPagamento: ' + pagamentoNome)
     
     setModalPagamento(false)
     setModalProdutos(null)
@@ -208,7 +212,7 @@ export default function ComandasPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-amber-800">📋 Comandas</h1>
+        <h1 className="text-3xl font-bold text-amber-800">ðŸ“‹ Comandas</h1>
         <button onClick={() => setModalComanda(true)} className="bg-amber-700 hover:bg-amber-800 text-white font-bold py-2 px-4 rounded-lg transition">
           + Nova Comanda
         </button>
@@ -217,7 +221,7 @@ export default function ComandasPage() {
       {comandas.length === 0 ? (
         <div className="bg-white rounded-lg shadow p-8 text-center">
           <p className="text-gray-500">Nenhuma comanda aberta.</p>
-          <p className="text-sm text-gray-400 mt-2">Clique em "Nova Comanda" para começar.</p>
+          <p className="text-sm text-gray-400 mt-2">Clique em "Nova Comanda" para comeÃ§ar.</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -250,7 +254,7 @@ export default function ComandasPage() {
             <h2 className="text-xl font-bold text-amber-800 mb-4">Nova Comanda</h2>
             <input 
               type="text" 
-              placeholder="Número da Mesa ou Nome do Cliente" 
+              placeholder="NÃºmero da Mesa ou Nome do Cliente" 
               value={novaMesa} 
               onChange={e => setNovaMesa(e.target.value)} 
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:ring-2 focus:ring-amber-500" 
@@ -275,7 +279,7 @@ export default function ComandasPage() {
             
             <div className="grid lg:grid-cols-2 gap-8">
               <div>
-                <h3 className="font-bold text-lg mb-4 text-gray-700">📦 Adicionar Produtos</h3>
+                <h3 className="font-bold text-lg mb-4 text-gray-700">ðŸ“¦ Adicionar Produtos</h3>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                   {produtos.map(p => (
                     <div key={p.id} className="flex justify-between items-center border-b border-gray-100 py-3">
@@ -295,7 +299,7 @@ export default function ComandasPage() {
               </div>
               
               <div>
-                <h3 className="font-bold text-lg mb-4 text-gray-700">🛒 Itens da Comanda</h3>
+                <h3 className="font-bold text-lg mb-4 text-gray-700">ðŸ›’ Itens da Comanda</h3>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                   {itens.length === 0 ? (
                     <p className="text-gray-400 text-center py-8">Nenhum item adicionado</p>
@@ -329,7 +333,7 @@ export default function ComandasPage() {
                     onClick={abrirModalPagamento} 
                     className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition text-lg"
                   >
-                    💰 Fechar Comanda e Finalizar Venda
+                    ðŸ’° Fechar Comanda e Finalizar Venda
                   </button>
                 </div>
               </div>
@@ -343,7 +347,7 @@ export default function ComandasPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 w-96 shadow-2xl">
             <div className="text-center mb-6">
-              <div className="text-5xl mb-3">💰</div>
+              <div className="text-5xl mb-3">ðŸ’°</div>
               <h2 className="text-2xl font-bold text-gray-800">Forma de Pagamento</h2>
               <p className="text-gray-500 mt-1">Total: <span className="font-bold text-green-600 text-xl">R$ {totalItens.toFixed(2)}</span></p>
             </div>
@@ -353,32 +357,32 @@ export default function ComandasPage() {
                 onClick={() => setPagamentoSelecionado('dinheiro')}
                 className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'dinheiro' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
               >
-                <div className="flex items-center gap-3"><span className="text-2xl">💵</span><span className="font-medium">Dinheiro</span></div>
-                {pagamentoSelecionado === 'dinheiro' && <span className="text-green-500 text-xl">✓</span>}
+                <div className="flex items-center gap-3"><span className="text-2xl">ðŸ’µ</span><span className="font-medium">Dinheiro</span></div>
+                {pagamentoSelecionado === 'dinheiro' && <span className="text-green-500 text-xl">âœ“</span>}
               </button>
               
               <button 
                 onClick={() => setPagamentoSelecionado('cartao_credito')}
                 className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'cartao_credito' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
               >
-                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão de Crédito</span></div>
-                {pagamentoSelecionado === 'cartao_credito' && <span className="text-green-500 text-xl">✓</span>}
+                <div className="flex items-center gap-3"><span className="text-2xl">ðŸ’³</span><span className="font-medium">CartÃ£o de CrÃ©dito</span></div>
+                {pagamentoSelecionado === 'cartao_credito' && <span className="text-green-500 text-xl">âœ“</span>}
               </button>
               
               <button 
                 onClick={() => setPagamentoSelecionado('cartao_debito')}
                 className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'cartao_debito' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
               >
-                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão de Débito</span></div>
-                {pagamentoSelecionado === 'cartao_debito' && <span className="text-green-500 text-xl">✓</span>}
+                <div className="flex items-center gap-3"><span className="text-2xl">ðŸ’³</span><span className="font-medium">CartÃ£o de DÃ©bito</span></div>
+                {pagamentoSelecionado === 'cartao_debito' && <span className="text-green-500 text-xl">âœ“</span>}
               </button>
               
               <button 
                 onClick={() => setPagamentoSelecionado('pix')}
                 className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'pix' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
               >
-                <div className="flex items-center gap-3"><span className="text-2xl">📱</span><span className="font-medium">PIX</span></div>
-                {pagamentoSelecionado === 'pix' && <span className="text-green-500 text-xl">✓</span>}
+                <div className="flex items-center gap-3"><span className="text-2xl">ðŸ“±</span><span className="font-medium">PIX</span></div>
+                {pagamentoSelecionado === 'pix' && <span className="text-green-500 text-xl">âœ“</span>}
               </button>
             </div>
             
@@ -391,4 +395,4 @@ export default function ComandasPage() {
       )}
     </div>
   )
-}
+} }

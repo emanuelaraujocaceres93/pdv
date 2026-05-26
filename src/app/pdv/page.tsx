@@ -1,3 +1,7 @@
+﻿'use client'
+
+import MenuLayout from '../MenuLayout'
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -10,7 +14,7 @@ interface Produto {
   stock: number
 }
 
-export default function PDVPage() {
+export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayout>; } function Conteudo() { return PDVPage() {
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [carrinho, setCarrinho] = useState<{ produto: Produto; quantidade: number }[]>([])
   const [busca, setBusca] = useState('')
@@ -77,7 +81,7 @@ export default function PDVPage() {
   return (
     <div className="grid lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2">
-        <h1 className="text-3xl font-bold text-amber-800 mb-6">🛒 Ponto de Venda</h1>
+        <h1 className="text-3xl font-bold text-amber-800 mb-6">ðŸ›’ Ponto de Venda</h1>
         <input type="text" placeholder="Buscar produto..." value={busca} onChange={(e) => setBusca(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-4" />
         <div className="grid sm:grid-cols-2 gap-4">
           {produtosFiltrados.map(produto => (
@@ -106,11 +110,11 @@ export default function PDVPage() {
       {modalPagamento && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-96"><h2 className="text-xl font-bold mb-4">Forma de Pagamento</h2>
-            <div className="space-y-3"><button onClick={() => finalizarVenda('dinheiro')} className="w-full bg-green-600 text-white py-3 rounded">💵 Dinheiro</button><button onClick={() => finalizarVenda('cartao_credito')} className="w-full bg-blue-600 text-white py-3 rounded">💳 Cartão de Crédito</button><button onClick={() => finalizarVenda('cartao_debito')} className="w-full bg-blue-500 text-white py-3 rounded">💳 Cartão de Débito</button><button onClick={() => finalizarVenda('pix')} className="w-full bg-green-500 text-white py-3 rounded">📱 PIX</button></div>
+            <div className="space-y-3"><button onClick={() => finalizarVenda('dinheiro')} className="w-full bg-green-600 text-white py-3 rounded">ðŸ’µ Dinheiro</button><button onClick={() => finalizarVenda('cartao_credito')} className="w-full bg-blue-600 text-white py-3 rounded">ðŸ’³ CartÃ£o de CrÃ©dito</button><button onClick={() => finalizarVenda('cartao_debito')} className="w-full bg-blue-500 text-white py-3 rounded">ðŸ’³ CartÃ£o de DÃ©bito</button><button onClick={() => finalizarVenda('pix')} className="w-full bg-green-500 text-white py-3 rounded">ðŸ“± PIX</button></div>
             <button onClick={() => setModalPagamento(false)} className="w-full mt-4 bg-gray-300 py-2 rounded">Cancelar</button>
           </div>
         </div>
       )}
     </div>
   )
-}
+} }

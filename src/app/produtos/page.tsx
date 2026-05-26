@@ -1,3 +1,7 @@
+﻿'use client'
+
+import MenuLayout from '../MenuLayout'
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -12,7 +16,7 @@ interface Produto {
   min_stock: number
 }
 
-export default function ProdutosPage() {
+export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayout>; } function Conteudo() { return ProdutosPage() {
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [loading, setLoading] = useState(true)
   const [modalAberto, setModalAberto] = useState(false)
@@ -81,7 +85,7 @@ export default function ProdutosPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-amber-800">🍷 Produtos e Estoque</h1>
+        <h1 className="text-3xl font-bold text-amber-800">ðŸ· Produtos e Estoque</h1>
         <div className="flex gap-3">
           {filtroBaixo && <button onClick={() => { setFiltroBaixo(false); window.location.href = '/produtos' }} className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">Ver Todos</button>}
           <button onClick={() => abrirModal()} className="bg-amber-700 hover:bg-amber-800 text-white font-bold py-2 px-4 rounded-lg transition">+ Novo Produto</button>
@@ -91,11 +95,11 @@ export default function ProdutosPage() {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
-            <tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preço</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estoque</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mínimo</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr>
+            <tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">PreÃ§o</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estoque</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">MÃ­nimo</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">AÃ§Ãµes</th></tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {produtos.map((produto) => {
-              const status = produto.stock < produto.min_stock ? '⚠️ Baixo' : '✅ Normal'
+              const status = produto.stock < produto.min_stock ? 'âš ï¸ Baixo' : 'âœ… Normal'
               const statusClass = produto.stock < produto.min_stock ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
               return (<tr key={produto.id} className={produto.stock < produto.min_stock ? 'bg-red-50' : ''}>
                 <td className="px-6 py-4 font-medium">{produto.name}</td>
@@ -112,13 +116,13 @@ export default function ProdutosPage() {
 
       {modalAberto && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"><div className="bg-white rounded-xl p-6 w-96"><h2 className="text-xl font-bold text-amber-800 mb-4">{editando ? 'Editar' : 'Novo'} Produto</h2>
         <input type="text" placeholder="Nome do Produto" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
-        <input type="number" placeholder="Preço" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
+        <input type="number" placeholder="PreÃ§o" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
         <input type="number" placeholder="Estoque" value={form.stock} onChange={e => setForm({ ...form, stock: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
-        <input type="number" placeholder="Estoque Mínimo" value={form.min_stock} onChange={e => setForm({ ...form, min_stock: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-4" />
+        <input type="number" placeholder="Estoque MÃ­nimo" value={form.min_stock} onChange={e => setForm({ ...form, min_stock: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-4" />
         <div className="flex gap-3"><button onClick={salvarProduto} className="flex-1 bg-amber-700 text-white py-2 rounded-lg">Salvar</button><button onClick={() => setModalAberto(false)} className="flex-1 bg-gray-300 py-2 rounded-lg">Cancelar</button></div>
       </div></div>)}
 
       {produtoSelecionado && (<AddStockModal isOpen={modalEstoqueAberto} onClose={() => { setModalEstoqueAberto(false); setProdutoSelecionado(null) }} onConfirm={(qty) => adicionarEstoque(produtoSelecionado, qty)} productName={produtoSelecionado.name} currentStock={produtoSelecionado.stock} />)}
     </div>
   )
-}
+} }
