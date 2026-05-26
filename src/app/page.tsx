@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -12,7 +12,9 @@ export default function DashboardPage() {
     comandasAbertas: 0,
     vendasHoje: 0,
     produtosEstoqueBaixo: 0,
-    totalRetiradas: 0
+    totalRetiradas: 0,
+    lucroTotal: 0,
+    totalVendas: 0
   })
   const [usuario, setUsuario] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -38,8 +40,21 @@ export default function DashboardPage() {
     if (allProducts) estoqueBaixo = allProducts.filter(p => p.stock < (p.min_stock || 5)).length
     const { data: retiradas } = await supabase.from('movimentacoes_caixa').select('valor').eq('tipo', 'retirada').gte('created_at', hoje)
     const totalRetiradas = retiradas?.reduce((sum, r) => sum + r.valor, 0) || 0
+    
+    // Buscar lucro total
+    const { data: lucroData } = await supabase.from('lucro_total').select('*')
+    const lucroTotal = lucroData?.[0]?.lucro_total || 0
+    const totalVendas = lucroData?.[0]?.total_vendas || 0
 
-    setStats({ produtos: produtos || 0, comandasAbertas: comandas || 0, vendasHoje, produtosEstoqueBaixo: estoqueBaixo, totalRetiradas })
+    setStats({ 
+      produtos: produtos || 0, 
+      comandasAbertas: comandas || 0, 
+      vendasHoje, 
+      produtosEstoqueBaixo: estoqueBaixo,
+      totalRetiradas,
+      lucroTotal,
+      totalVendas
+    })
     setLoading(false)
   }
 
@@ -60,36 +75,32 @@ export default function DashboardPage() {
         </div>
       </div>
       
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
-        <Link href="/produtos" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-green-500 hover:shadow-lg transition cursor-pointer block">
-          <p className="text-gray-500 text-sm md:text-base">🍷 Produtos</p>
-          <p className="text-2xl md:text-3xl font-bold text-green-600">{stats.produtos}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver todos →</p>
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        <Link href="/produtos" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-green-500 hover:shadow-lg">
+          <p className="text-gray-500 text-sm">🍷 Produtos</p>
+          <p className="text-2xl font-bold text-green-600">{stats.produtos}</p>
         </Link>
-        
-        <Link href="/comandas" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-amber-500 hover:shadow-lg transition cursor-pointer block">
-          <p className="text-gray-500 text-sm md:text-base">📋 Comandas Abertas</p>
-          <p className="text-2xl md:text-3xl font-bold text-amber-600">{stats.comandasAbertas}</p>
-          <p className="text-xs text-gray-400 mt-2">Gerenciar →</p>
+        <Link href="/comandas" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-amber-500 hover:shadow-lg">
+          <p className="text-gray-500 text-sm">📋 Comandas Abertas</p>
+          <p className="text-2xl font-bold text-amber-600">{stats.comandasAbertas}</p>
         </Link>
-        
-        <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-blue-500 hover:shadow-lg transition cursor-pointer block">
-          <p className="text-gray-500 text-sm md:text-base">💰 Vendas Hoje</p>
-          <p className="text-2xl md:text-3xl font-bold text-blue-600">R$ {stats.vendasHoje.toFixed(2)}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver caixa →</p>
+        <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-blue-500 hover:shadow-lg">
+          <p className="text-gray-500 text-sm">💰 Vendas Hoje</p>
+          <p className="text-2xl font-bold text-blue-600">R$ {stats.vendasHoje.toFixed(2)}</p>
         </Link>
-        
-        <Link href="/produtos?estoque=baixo" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-red-500 hover:shadow-lg transition cursor-pointer block">
-          <p className="text-gray-500 text-sm md:text-base">⚠️ Estoque Baixo</p>
-          <p className="text-2xl md:text-3xl font-bold text-red-600">{stats.produtosEstoqueBaixo}</p>
-          <p className="text-xs text-gray-400 mt-2">Reabastecer →</p>
+        <Link href="/produtos?estoque=baixo" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-red-500 hover:shadow-lg">
+          <p className="text-gray-500 text-sm">⚠️ Estoque Baixo</p>
+          <p className="text-2xl font-bold text-red-600">{stats.produtosEstoqueBaixo}</p>
         </Link>
-        
-        <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-purple-500 hover:shadow-lg transition cursor-pointer block">
-          <p className="text-gray-500 text-sm md:text-base">💸 Retiradas Hoje</p>
-          <p className="text-2xl md:text-3xl font-bold text-purple-600">R$ {stats.totalRetiradas.toFixed(2)}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver caixa →</p>
+        <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-purple-500 hover:shadow-lg">
+          <p className="text-gray-500 text-sm">💸 Retiradas Hoje</p>
+          <p className="text-2xl font-bold text-purple-600">R$ {stats.totalRetiradas.toFixed(2)}</p>
         </Link>
+        <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg shadow p-4 md:p-6 text-white">
+          <p className="text-sm opacity-90">📊 Lucro Total</p>
+          <p className="text-2xl font-bold">R$ {stats.lucroTotal.toFixed(2)}</p>
+          <p className="text-xs opacity-75 mt-1">Vendas: R$ {stats.totalVendas.toFixed(2)}</p>
+        </div>
       </div>
     </div>
   )
