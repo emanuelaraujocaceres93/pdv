@@ -60,11 +60,13 @@ export default function PDVPage() {
     <div>
       <h1 className="text-3xl font-bold text-amber-800 mb-6">🛒 PDV</h1>
       
+      {/* Layout: em mobile é coluna, em desktop é linha lado a lado */}
       <div className="flex flex-col lg:flex-row gap-6">
-        {/* Produtos - 60% */}
+        
+        {/* Produtos - ocupa toda largura no mobile, 60% no desktop */}
         <div className="w-full lg:w-[60%]">
           <input type="text" placeholder="🔍 Buscar produto..." value={busca} onChange={e => setBusca(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-4" />
-          <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+          <div className="space-y-3 max-h-[500px] overflow-y-auto">
             {produtosFiltrados.map(p => (
               <div key={p.id} className="bg-white rounded-lg shadow p-4 flex justify-between items-center">
                 <div>
@@ -78,9 +80,9 @@ export default function PDVPage() {
           </div>
         </div>
         
-        {/* Carrinho - 40% - FIXO DO LADO DIREITO */}
-        <div className="w-full lg:w-[40%] bg-white rounded-lg shadow p-4 sticky top-20 self-start">
-          <h2 className="text-xl font-bold mb-4">🛒 Carrinho</h2>
+        {/* Carrinho - no desktop fica ao lado, no mobile fica embaixo (é o padrão flex-col) */}
+        <div className="w-full lg:w-[40%] bg-white rounded-lg shadow p-4 lg:sticky lg:top-20 lg:self-start">
+          <h2 className="text-xl font-bold mb-4">🛒 Carrinho ({carrinho.length})</h2>
           {carrinho.length === 0 ? (
             <p className="text-gray-500 text-center py-8">Carrinho vazio</p>
           ) : (
@@ -93,7 +95,7 @@ export default function PDVPage() {
                   </div>
                   <div className="flex justify-between mt-1">
                     <span>📦 Qtd: {i.quantidade}</span>
-                    <span className="font-semibold">💰 R$ {(i.produto.price * i.quantidade).toFixed(2)}</span>
+                    <span className="font-semibold">R$ {(i.produto.price * i.quantidade).toFixed(2)}</span>
                   </div>
                 </div>
               ))}
