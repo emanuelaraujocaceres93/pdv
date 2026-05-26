@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
@@ -77,7 +77,7 @@ export default function PDVPage() {
       }).eq('id', item.produto.id)
     }
 
-    alert('✅ Venda finalizada! Total: R$ ' + totalCarrinho.toFixed(2))
+    alert('âœ… Venda finalizada! Total: R$ ' + totalCarrinho.toFixed(2))
     setCarrinho([])
     setModalPagamento(false)
     setPagamentoSelecionado('')
@@ -86,7 +86,7 @@ export default function PDVPage() {
 
   return (
     <div className="h-full">
-      <h1 className="text-2xl md:text-3xl font-bold text-amber-800 mb-4 md:mb-6">🛒 PDV</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-amber-800 mb-4 md:mb-6">ðŸ›’ PDV</h1>
       
       {/* Container com flex row em todas as telas */}
       <div className="flex flex-row gap-4 md:gap-6">
@@ -95,7 +95,7 @@ export default function PDVPage() {
         <div className="w-[60%]">
           <input 
             type="text" 
-            placeholder="🔍 Buscar produto..." 
+            placeholder="ðŸ” Buscar produto..." 
             value={busca} 
             onChange={e => setBusca(e.target.value)} 
             className="w-full border rounded-lg px-3 md:px-4 py-2 text-sm md:text-base mb-3 md:mb-4 focus:ring-2 focus:ring-amber-500" 
@@ -122,7 +122,7 @@ export default function PDVPage() {
         {/* Coluna do Carrinho - 40% da largura, sempre ao lado */}
         <div className="w-[40%] bg-white rounded-lg shadow p-3 md:p-4 sticky top-20 self-start">
           <h2 className="text-base md:text-xl font-bold mb-2 md:mb-4 flex items-center gap-2">
-            🛒 Carrinho <span className="text-xs md:text-sm text-gray-500">({carrinho.length} itens)</span>
+            ðŸ›’ Carrinho <span className="text-xs md:text-sm text-gray-500">({carrinho.length} itens)</span>
           </h2>
           
           {carrinho.length === 0 ? (
@@ -133,7 +133,7 @@ export default function PDVPage() {
                 <div key={i.produto.id} className="border-b pb-2 md:pb-3">
                   <div className="flex justify-between items-start">
                     <span className="font-medium text-xs md:text-sm flex-1">{i.produto.name}</span>
-                    <button onClick={() => remover(i.produto.id)} className="text-red-500 text-xs md:text-sm px-1 md:px-2">✕</button>
+                    <button onClick={() => remover(i.produto.id)} className="text-red-500 text-xs md:text-sm px-1 md:px-2">âœ•</button>
                   </div>
                   <div className="flex justify-between items-center mt-1 md:mt-2">
                     <div className="flex items-center gap-1 md:gap-2">
@@ -158,7 +158,7 @@ export default function PDVPage() {
               disabled={carrinho.length === 0} 
               className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 md:py-3 rounded-lg transition text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              💰 Finalizar Venda
+              ðŸ’° Finalizar Venda
             </button>
           </div>
         </div>
@@ -169,22 +169,22 @@ export default function PDVPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-5 md:p-6 w-full max-w-md">
             <div className="text-center mb-4 md:mb-6">
-              <div className="text-4xl md:text-5xl mb-2 md:mb-3">💰</div>
+              <div className="text-4xl md:text-5xl mb-2 md:mb-3">ðŸ’°</div>
               <h2 className="text-xl md:text-2xl font-bold">Forma de Pagamento</h2>
               <p className="text-gray-500 mt-1">Total: <span className="font-bold text-green-600">R$ {totalCarrinho.toFixed(2)}</span></p>
             </div>
             <div className="space-y-2 md:space-y-3">
               <button onClick={() => setPagamentoSelecionado('dinheiro')} className={'w-full p-3 md:p-4 rounded-xl border-2 text-left flex items-center gap-3 transition ' + (pagamentoSelecionado === 'dinheiro' ? 'border-green-500 bg-green-50' : 'border-gray-200')}>
-                <span className="text-xl md:text-2xl">💵</span><span>Dinheiro</span>{pagamentoSelecionado === 'dinheiro' && <span className="ml-auto text-green-500">✓</span>}
+                <span className="text-xl md:text-2xl">ðŸ’µ</span><span>Dinheiro</span>{pagamentoSelecionado === 'dinheiro' && <span className="ml-auto text-green-500">âœ“</span>}
               </button>
               <button onClick={() => setPagamentoSelecionado('cartao_credito')} className={'w-full p-3 md:p-4 rounded-xl border-2 text-left flex items-center gap-3 transition ' + (pagamentoSelecionado === 'cartao_credito' ? 'border-green-500 bg-green-50' : 'border-gray-200')}>
-                <span className="text-xl md:text-2xl">💳</span><span>Cartão Crédito</span>{pagamentoSelecionado === 'cartao_credito' && <span className="ml-auto text-green-500">✓</span>}
+                <span className="text-xl md:text-2xl">ðŸ’³</span><span>CartÃ£o CrÃ©dito</span>{pagamentoSelecionado === 'cartao_credito' && <span className="ml-auto text-green-500">âœ“</span>}
               </button>
               <button onClick={() => setPagamentoSelecionado('cartao_debito')} className={'w-full p-3 md:p-4 rounded-xl border-2 text-left flex items-center gap-3 transition ' + (pagamentoSelecionado === 'cartao_debito' ? 'border-green-500 bg-green-50' : 'border-gray-200')}>
-                <span className="text-xl md:text-2xl">💳</span><span>Cartão Débito</span>{pagamentoSelecionado === 'cartao_debito' && <span className="ml-auto text-green-500">✓</span>}
+                <span className="text-xl md:text-2xl">ðŸ’³</span><span>CartÃ£o DÃ©bito</span>{pagamentoSelecionado === 'cartao_debito' && <span className="ml-auto text-green-500">âœ“</span>}
               </button>
               <button onClick={() => setPagamentoSelecionado('pix')} className={'w-full p-3 md:p-4 rounded-xl border-2 text-left flex items-center gap-3 transition ' + (pagamentoSelecionado === 'pix' ? 'border-green-500 bg-green-50' : 'border-gray-200')}>
-                <span className="text-xl md:text-2xl">📱</span><span>PIX</span>{pagamentoSelecionado === 'pix' && <span className="ml-auto text-green-500">✓</span>}
+                <span className="text-xl md:text-2xl">ðŸ“±</span><span>PIX</span>{pagamentoSelecionado === 'pix' && <span className="ml-auto text-green-500">âœ“</span>}
               </button>
             </div>
             <div className="flex gap-3 mt-4 md:mt-6">

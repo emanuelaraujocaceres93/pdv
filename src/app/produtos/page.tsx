@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
@@ -58,7 +58,7 @@ export default function ProdutosPage() {
       name: form.name, 
       price: parseFloat(form.price), 
       stock: parseInt(form.stock), 
-      min_stock: parseInt(form.min_stock) || 5, // Se vazio, salva 5 como padrão
+      min_stock: parseInt(form.min_stock) || 5, // Se vazio, salva 5 como padrÃ£o
       company_id: 'dfb78f16-530b-4b20-8c26-5f9a4fb972c8' 
     }
     
@@ -91,7 +91,7 @@ export default function ProdutosPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-amber-800">🍷 Produtos e Estoque</h1>
+        <h1 className="text-3xl font-bold text-amber-800">ðŸ· Produtos e Estoque</h1>
         <div className="flex gap-3">
           {filtroBaixo && <button onClick={() => { setFiltroBaixo(false); window.location.href = '/produtos' }} className="bg-gray-500 text-white px-4 py-2 rounded-lg">Ver Todos</button>}
           <button onClick={() => abrirModal()} className="bg-amber-700 hover:bg-amber-800 text-white font-bold py-2 px-4 rounded-lg transition">+ Novo Produto</button>
@@ -101,11 +101,11 @@ export default function ProdutosPage() {
       <div className="bg-white rounded-lg shadow overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
-            <tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Preço</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estoque</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mínimo</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ações</th></tr>
+            <tr><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produto</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">PreÃ§o</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estoque</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">MÃ­nimo</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">AÃ§Ãµes</th></tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {produtos.map((produto) => {
-              const status = produto.stock < produto.min_stock ? '⚠️ Baixo' : '✅ Normal'
+              const status = produto.stock < produto.min_stock ? 'âš ï¸ Baixo' : 'âœ… Normal'
               const statusClass = produto.stock < produto.min_stock ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
               return (<tr key={produto.id} className={produto.stock < produto.min_stock ? 'bg-red-50' : ''}>
                 <td className="px-6 py-4 font-medium">{produto.name}</td>
@@ -129,15 +129,15 @@ export default function ProdutosPage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
             <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
             
-            <label className="block text-sm font-medium text-gray-700 mb-1">Preço</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">PreÃ§o</label>
             <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
             
             <label className="block text-sm font-medium text-gray-700 mb-1">Estoque</label>
             <input type="number" value={form.stock} onChange={e => setForm({ ...form, stock: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-3" />
             
-            <label className="block text-sm font-medium text-gray-700 mb-1">Estoque Mínimo (opcional)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Estoque MÃ­nimo (opcional)</label>
             <input type="number" placeholder="Ex: 5" value={form.min_stock} onChange={e => setForm({ ...form, min_stock: e.target.value })} className="w-full border rounded-lg px-4 py-2 mb-4" />
-            <p className="text-xs text-gray-400 mb-3">⚠️ Se deixar vazio, será usado 5 como padrão</p>
+            <p className="text-xs text-gray-400 mb-3">âš ï¸ Se deixar vazio, serÃ¡ usado 5 como padrÃ£o</p>
             
             <div className="flex gap-3">
               <button onClick={salvarProduto} className="flex-1 bg-amber-700 text-white py-2 rounded-lg">Salvar</button>

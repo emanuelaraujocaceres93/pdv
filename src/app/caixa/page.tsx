@@ -252,3 +252,4 @@ export default function CaixaPage() {
     </div>
   )
 }
+
