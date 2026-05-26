@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
@@ -72,7 +72,7 @@ export default function CaixaPage() {
   async function fazerRetirada() {
     const valor = parseFloat(valorRetirada)
     if (isNaN(valor) || valor <= 0) {
-      alert('Digite um valor válido')
+      alert('Digite um valor vÃ¡lido')
       return
     }
 
@@ -88,7 +88,7 @@ export default function CaixaPage() {
         return
       }
 
-      alert('✅ Retirada registrada com sucesso!')
+      alert('âœ… Retirada registrada com sucesso!')
       setModalRetirada(false)
       setValorRetirada('')
       setDescricaoRetirada('')
@@ -104,7 +104,7 @@ export default function CaixaPage() {
       await supabase.from('vendas_itens').delete().eq('venda_id', id)
       carregarDados()
       setModalDetalhes(null)
-      alert('Venda excluída com sucesso!')
+      alert('Venda excluÃ­da com sucesso!')
     }
   }
 
@@ -114,10 +114,10 @@ export default function CaixaPage() {
 
   function formatarPagamento(method: string) {
     const methods: Record<string, string> = {
-      dinheiro: '💵 Dinheiro',
-      cartao_credito: '💳 Cartão Crédito',
-      cartao_debito: '💳 Cartão Débito',
-      pix: '📱 PIX'
+      dinheiro: 'ðŸ’µ Dinheiro',
+      cartao_credito: 'ðŸ’³ CartÃ£o CrÃ©dito',
+      cartao_debito: 'ðŸ’³ CartÃ£o DÃ©bito',
+      pix: 'ðŸ“± PIX'
     }
     return methods[method] || method
   }
@@ -126,12 +126,12 @@ export default function CaixaPage() {
 
   return (
     <div>
-      <h1 className="text-2xl md:text-3xl font-bold text-amber-800 mb-6">💰 Caixa</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-amber-800 mb-6">ðŸ’° Caixa</h1>
       
       <div className="flex flex-col lg:flex-row gap-6 mb-6">
         {/* Resumo do Caixa */}
         <div className="flex-1 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4">📊 Resumo do Caixa</h2>
+          <h2 className="text-xl font-bold mb-4">ðŸ“Š Resumo do Caixa</h2>
           <div className="space-y-3">
             <div className="flex justify-between py-2 border-b">
               <span>Total de Vendas:</span>
@@ -147,13 +147,13 @@ export default function CaixaPage() {
             </div>
           </div>
           <button onClick={() => setModalRetirada(true)} className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg transition">
-            💰 Retirar Dinheiro
+            ðŸ’° Retirar Dinheiro
           </button>
         </div>
         
-        {/* Últimas Retiradas */}
+        {/* Ãšltimas Retiradas */}
         <div className="flex-1 bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold mb-4">💸 Últimas Retiradas</h2>
+          <h2 className="text-xl font-bold mb-4">ðŸ’¸ Ãšltimas Retiradas</h2>
           <div className="space-y-2 max-h-[300px] overflow-y-auto">
             {retiradas.length === 0 ? (
               <p className="text-gray-400 text-center py-4">Nenhuma retirada registrada</p>
@@ -161,7 +161,7 @@ export default function CaixaPage() {
               retiradas.slice(0, 10).map(r => (
                 <div key={r.id} className="p-3 bg-gray-50 rounded-lg">
                   <div className="flex justify-between">
-                    <span className="text-red-600 font-bold">💸 Retirada</span>
+                    <span className="text-red-600 font-bold">ðŸ’¸ Retirada</span>
                     <span className="text-red-600 font-bold">R$ {r.valor.toFixed(2)}</span>
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
@@ -174,10 +174,10 @@ export default function CaixaPage() {
         </div>
       </div>
 
-      {/* Últimas Vendas - COM CLIQUE PARA DETALHES */}
+      {/* Ãšltimas Vendas - COM CLIQUE PARA DETALHES */}
       <div className="bg-white rounded-xl shadow-lg p-6">
-        <h2 className="text-xl font-bold mb-4">📋 Últimas Vendas</h2>
-        <div className="space-y-2 max-h-[400px] overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4">ðŸ“‹ Ãšltimas Vendas</h2>
+        <div className="space-y-2 max-h-100 overflow-y-auto">
           {vendas.length === 0 ? (
             <p className="text-gray-400 text-center py-4">Nenhuma venda registrada</p>
           ) : (
@@ -206,9 +206,9 @@ export default function CaixaPage() {
       {modalRetirada && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold text-amber-800 mb-4">💰 Retirar Dinheiro</h2>
+            <h2 className="text-xl font-bold text-amber-800 mb-4">ðŸ’° Retirar Dinheiro</h2>
             <input type="number" placeholder="Valor" value={valorRetirada} onChange={e => setValorRetirada(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-3" />
-            <input type="text" placeholder="Descrição (opcional)" value={descricaoRetirada} onChange={e => setDescricaoRetirada(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-4" />
+            <input type="text" placeholder="DescriÃ§Ã£o (opcional)" value={descricaoRetirada} onChange={e => setDescricaoRetirada(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-4" />
             <div className="flex gap-3">
               <button onClick={fazerRetirada} className="flex-1 bg-red-600 text-white py-2 rounded-lg">Confirmar</button>
               <button onClick={() => setModalRetirada(false)} className="flex-1 bg-gray-300 py-2 rounded-lg">Cancelar</button>
@@ -222,7 +222,7 @@ export default function CaixaPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-amber-800">🧾 Detalhes da Venda</h2>
+              <h2 className="text-2xl font-bold text-amber-800">ðŸ§¾ Detalhes da Venda</h2>
               <button onClick={() => setModalDetalhes(null)} className="text-gray-500 text-3xl">&times;</button>
             </div>
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
@@ -230,7 +230,7 @@ export default function CaixaPage() {
               <div className="flex justify-between mb-2"><span className="text-gray-600">Pagamento:</span><span>{formatarPagamento(modalDetalhes.payment_method)}</span></div>
               <div className="flex justify-between pt-2 border-t"><span className="font-bold">Total:</span><span className="font-bold text-green-600 text-xl">R$ {modalDetalhes.total.toFixed(2)}</span></div>
             </div>
-            <h3 className="font-bold text-lg mb-3">🛒 Produtos Vendidos</h3>
+            <h3 className="font-bold text-lg mb-3">ðŸ›’ Produtos Vendidos</h3>
             <div className="space-y-2 mb-4">
               {itensVenda.map(item => (
                 <div key={item.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
@@ -243,7 +243,7 @@ export default function CaixaPage() {
               ))}
             </div>
             <div className="flex gap-3">
-              <button onClick={() => excluirVenda(modalDetalhes.id)} className="flex-1 bg-red-600 text-white py-2 rounded-lg">🗑️ Excluir Venda</button>
+              <button onClick={() => excluirVenda(modalDetalhes.id)} className="flex-1 bg-red-600 text-white py-2 rounded-lg">ðŸ—‘ï¸ Excluir Venda</button>
               <button onClick={() => setModalDetalhes(null)} className="flex-1 bg-gray-300 py-2 rounded-lg">Fechar</button>
             </div>
           </div>

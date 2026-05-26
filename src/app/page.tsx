@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -72,9 +72,9 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-amber-800">📊 Dashboard</h1>
+        <h1 className="text-3xl font-bold text-amber-800">ðŸ“Š Dashboard</h1>
         <div className="flex items-center gap-4">
-          <span className="text-gray-600">Olá, {usuario?.nome}!</span>
+          <span className="text-gray-600">OlÃ¡, {usuario?.nome}!</span>
           <button onClick={fazerLogout} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition text-sm">Sair</button>
         </div>
       </div>
@@ -84,35 +84,35 @@ export default function DashboardPage() {
         <Link href="/produtos" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-green-500 hover:shadow-lg transition cursor-pointer block">
           <p className="text-gray-500 text-sm md:text-base">Produtos</p>
           <p className="text-2xl md:text-3xl font-bold text-green-600">{stats.produtos}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver todos →</p>
+          <p className="text-xs text-gray-400 mt-2">Ver todos â†’</p>
         </Link>
         
         {/* Comandas Abertas */}
         <Link href="/comandas" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-amber-500 hover:shadow-lg transition cursor-pointer block">
           <p className="text-gray-500 text-sm md:text-base">Comandas Abertas</p>
           <p className="text-2xl md:text-3xl font-bold text-amber-600">{stats.comandasAbertas}</p>
-          <p className="text-xs text-gray-400 mt-2">Gerenciar →</p>
+          <p className="text-xs text-gray-400 mt-2">Gerenciar â†’</p>
         </Link>
         
         {/* Vendas Hoje */}
         <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-blue-500 hover:shadow-lg transition cursor-pointer block">
           <p className="text-gray-500 text-sm md:text-base">Vendas Hoje</p>
           <p className="text-2xl md:text-3xl font-bold text-blue-600">R$ {stats.vendasHoje.toFixed(2)}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver caixa →</p>
+          <p className="text-xs text-gray-400 mt-2">Ver caixa â†’</p>
         </Link>
         
         {/* Estoque Baixo */}
         <Link href="/produtos?estoque=baixo" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-red-500 hover:shadow-lg transition cursor-pointer block">
           <p className="text-gray-500 text-sm md:text-base">Estoque Baixo</p>
           <p className="text-2xl md:text-3xl font-bold text-red-600">{stats.produtosEstoqueBaixo}</p>
-          <p className="text-xs text-gray-400 mt-2">Reabastecer →</p>
+          <p className="text-xs text-gray-400 mt-2">Reabastecer â†’</p>
         </Link>
         
         {/* Retiradas Hoje */}
         <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-purple-500 hover:shadow-lg transition cursor-pointer block">
           <p className="text-gray-500 text-sm md:text-base">Retiradas Hoje</p>
           <p className="text-2xl md:text-3xl font-bold text-purple-600">R$ {stats.totalRetiradas.toFixed(2)}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver caixa →</p>
+          <p className="text-xs text-gray-400 mt-2">Ver caixa â†’</p>
         </Link>
       </div>
     </div>
