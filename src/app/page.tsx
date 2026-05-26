@@ -1,21 +1,10 @@
-﻿'use client'
-
-import MenuLayout from '../MenuLayout'
-
 'use client'
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 
-interface Usuario {
-  id: string
-  email: string
-  nome: string
-  role: string
-}
-
-export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayout>; } function Conteudo() { return DashboardPage() {
+export default function DashboardPage() {
   const router = useRouter()
   const [stats, setStats] = useState({
     produtos: 0,
@@ -23,17 +12,15 @@ export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayou
     vendasHoje: 0,
     produtosEstoqueBaixo: 0
   })
-  const [usuario, setUsuario] = useState<Usuario | null>(null)
+  const [usuario, setUsuario] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Verificar se usuÃ¡rio estÃ¡ logado
     const userLogado = localStorage.getItem('usuario_logado')
     if (!userLogado) {
       router.push('/login')
       return
     }
-    
     setUsuario(JSON.parse(userLogado))
     carregarStats()
   }, [])
@@ -57,14 +44,14 @@ export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayou
     router.push('/login')
   }
 
-  if (loading) return <div className="text-center py-10">Carregando dashboard...</div>
+  if (loading) return <div className="text-center py-10">Carregando...</div>
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-amber-800">ðŸ“Š Dashboard</h1>
+        <h1 className="text-3xl font-bold text-amber-800">📊 Dashboard</h1>
         <div className="flex items-center gap-4">
-          <span className="text-gray-600">OlÃ¡, {usuario?.nome}!</span>
+          <span className="text-gray-600">Olá, {usuario?.nome}!</span>
           <button onClick={fazerLogout} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition text-sm">Sair</button>
         </div>
       </div>
@@ -74,17 +61,14 @@ export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayou
           <p className="text-gray-500">Produtos</p>
           <p className="text-3xl font-bold text-green-600">{stats.produtos}</p>
         </div>
-        
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500">
           <p className="text-gray-500">Comandas Abertas</p>
           <p className="text-3xl font-bold text-amber-600">{stats.comandasAbertas}</p>
         </div>
-        
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
           <p className="text-gray-500">Vendas Hoje</p>
           <p className="text-3xl font-bold text-blue-600">R$ {stats.vendasHoje.toFixed(2)}</p>
         </div>
-        
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-red-500">
           <p className="text-gray-500">Estoque Baixo</p>
           <p className="text-3xl font-bold text-red-600">{stats.produtosEstoqueBaixo}</p>
@@ -92,4 +76,4 @@ export default function ComLayout() { return <MenuLayout><Conteudo /></MenuLayou
       </div>
     </div>
   )
-} }
+}

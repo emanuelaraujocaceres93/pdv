@@ -16,7 +16,6 @@ export default function LoginPage() {
     setLoading(true)
     setErro('')
 
-    // Buscar usuário na tabela usuarios
     const { data, error } = await supabase
       .from('usuarios')
       .select('*')
@@ -30,7 +29,6 @@ export default function LoginPage() {
       return
     }
 
-    // Salvar usuário no localStorage
     localStorage.setItem('usuario_logado', JSON.stringify({
       id: data.id,
       email: data.email,
@@ -53,47 +51,17 @@ export default function LoginPage() {
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
-              placeholder="admin@adega.com"
-              required
-            />
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="admin@adega.com" required />
           </div>
-
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2">Senha</label>
-            <input
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500"
-              placeholder="******"
-              required
-            />
+            <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="******" required />
           </div>
-
-          {erro && (
-            <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
-              {erro}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 rounded-lg transition disabled:opacity-50"
-          >
-            {loading ? 'Entrando...' : 'Entrar'}
-          </button>
+          {erro && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">{erro}</div>}
+          <button type="submit" disabled={loading} className="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 rounded-lg transition disabled:opacity-50">{loading ? 'Entrando...' : 'Entrar'}</button>
         </form>
-
         <div className="mt-6 pt-4 border-t border-gray-200 text-center">
-          <p className="text-xs text-gray-400">
-            Credenciais padrão: admin@adega.com / admin123
-          </p>
+          <p className="text-xs text-gray-400">Credenciais: admin@adega.com / admin123</p>
         </div>
       </div>
     </div>
