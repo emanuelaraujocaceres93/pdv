@@ -38,6 +38,7 @@ export default function ComandasPage() {
   const [itens, setItens] = useState<ItemComanda[]>([])
   const [novaMesa, setNovaMesa] = useState('')
   const [pagamentoSelecionado, setPagamentoSelecionado] = useState('')
+  const [buscaProduto, setBuscaProduto] = useState('') // Campo de busca
 
   useEffect(() => { carregarComandas(); carregarProdutos() }, [])
 
@@ -108,6 +109,11 @@ export default function ComandasPage() {
     router.push('/caixa')
   }
 
+  // Filtrar produtos pela busca
+  const produtosFiltrados = produtos.filter(p => 
+    p.name.toLowerCase().includes(buscaProduto.toLowerCase())
+  )
+
   const totalItens = itens.reduce((sum, i) => sum + (i.price * i.quantity), 0)
 
   if (loading) return <div className="text-center py-10">Carregando comandas...</div>
@@ -159,16 +165,28 @@ export default function ComandasPage() {
               {/* Produtos - 60% */}
               <div className="w-[60%]">
                 <h3 className="font-bold text-lg mb-4">📦 Adicionar Produtos</h3>
+                {/* Campo de busca */}
+                <input 
+                  type="text" 
+                  placeholder="🔍 Buscar produto..." 
+                  value={buscaProduto} 
+                  onChange={e => setBuscaProduto(e.target.value)} 
+                  className="w-full border rounded-lg px-4 py-2 mb-4 text-sm"
+                />
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
-                  {produtos.map(p => (
-                    <div key={p.id} className="flex justify-between items-center border-b py-3">
-                      <div>
-                        <p className="font-medium">{p.name}</p>
-                        <p className="text-sm text-green-600">R$ {p.price.toFixed(2)}</p>
+                  {produtosFiltrados.length === 0 ? (
+                    <p className="text-gray-400 text-center py-4">Nenhum produto encontrado</p>
+                  ) : (
+                    produtosFiltrados.map(p => (
+                      <div key={p.id} className="flex justify-between items-center border-b py-3">
+                        <div>
+                          <p className="font-medium">{p.name}</p>
+                          <p className="text-sm text-green-600">R$ {p.price.toFixed(2)}</p>
+                        </div>
+                        <button onClick={() => adicionarProduto(modalProdutos.id, p)} className="bg-amber-700 text-white px-4 py-2 rounded-lg">+ Adicionar</button>
                       </div>
-                      <button onClick={() => adicionarProduto(modalProdutos.id, p)} className="bg-amber-700 text-white px-4 py-2 rounded-lg">+ Adicionar</button>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
               
