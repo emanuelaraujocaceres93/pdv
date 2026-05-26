@@ -108,11 +108,11 @@ export default function DashboardPage() {
           <p className="text-xs text-gray-400 mt-2">Reabastecer →</p>
         </Link>
         
-        {/* Retiradas Hoje */}
+        {/* Retiradas Hoje - NOVO BOTÃO */}
         <Link href="/caixa" className="bg-white rounded-lg shadow p-4 md:p-6 border-l-4 border-purple-500 hover:shadow-lg transition cursor-pointer block">
           <p className="text-gray-500 text-sm md:text-base">Retiradas Hoje</p>
           <p className="text-2xl md:text-3xl font-bold text-purple-600">R$ {stats.totalRetiradas.toFixed(2)}</p>
-          <p className="text-xs text-gray-400 mt-2">Ver caixa →</p>
+          <p className="text-xs text-gray-400 mt-2">Ver retiradas →</p>
         </Link>
       </div>
     </div>
