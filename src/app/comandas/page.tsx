@@ -12,6 +12,8 @@ type Command = {
   created_at: string
 }
 
+const companyId = process.env.NEXT_PUBLIC_COMPANY_ID ?? ''
+
 export default function ComandasPage() {
   const [commands, setCommands] = useState<Command[]>([])
   const [loading, setLoading] = useState(false)
@@ -20,10 +22,15 @@ export default function ComandasPage() {
   useEffect(() => {
     async function loadCommands() {
       setLoading(true)
-      const { data, error } = await supabase
+      let query = supabase
         .from('commands')
         .select('id,table_number,status,total,created_at')
-        .order('created_at', { ascending: false })
+
+      if (companyId) {
+        query = query.eq('company_id', companyId)
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false })
 
       if (error) {
         setError(error.message)

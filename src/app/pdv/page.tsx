@@ -18,6 +18,8 @@ type CartItem = Product & {
   unit_price: number
 }
 
+const companyId = process.env.NEXT_PUBLIC_COMPANY_ID ?? ''
+
 export default function PdvPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [items, setItems] = useState<CartItem[]>([])
@@ -80,8 +82,14 @@ export default function PdvPage() {
 
     setLoading(true)
     const total = items.reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
+    if (!companyId) {
+      setMessage('Defina NEXT_PUBLIC_COMPANY_ID no .env.local antes de usar o PDV.')
+      setLoading(false)
+      return
+    }
+
     const commandPayload = {
-      company_id: null,
+      company_id: companyId,
       table_number: '1',
       status: 'open',
       total,
