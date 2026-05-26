@@ -16,20 +16,26 @@ export default function LoginPage() {
     setLoading(true)
     setErro('')
 
-    console.log('Tentando login com:', email, senha)
-
     try {
-      // Buscar usuário na tabela usuarios
+      // Usando query mais simples sem filtro duplo
       const { data, error } = await supabase
         .from('usuarios')
         .select('*')
         .eq('email', email)
-        .eq('senha', senha)
-        .single()
 
-      console.log('Resposta do Supabase:', { data, error })
+      if (error) {
+        console.error('Erro na consulta:', error)
+        setErro('Erro ao conectar com o servidor')
+        setLoading(false)
+        return
+      }
 
-      if (error || !data) {
+      console.log('Usuários encontrados:', data)
+
+      // Verificar se encontrou usuário e se a senha está correta
+      const usuario = data?.find(u => u.email === email && u.senha === senha)
+
+      if (!usuario) {
         setErro('Email ou senha incorretos')
         setLoading(false)
         return
@@ -37,18 +43,17 @@ export default function LoginPage() {
 
       // Salvar usuário no localStorage
       localStorage.setItem('usuario_logado', JSON.stringify({
-        id: data.id,
-        email: data.email,
-        nome: data.nome,
-        role: data.role
+        id: usuario.id,
+        email: usuario.email,
+        nome: usuario.nome,
+        role: usuario.role
       }))
 
-      console.log('Login bem-sucedido!', data.nome)
       router.push('/')
       
     } catch (err) {
       console.error('Erro no login:', err)
-      setErro('Erro ao conectar com o servidor')
+      setErro('Erro ao fazer login. Tente novamente.')
       setLoading(false)
     }
   }
@@ -104,8 +109,8 @@ export default function LoginPage() {
 
         <div className="mt-6 pt-4 border-t border-gray-200 text-center">
           <p className="text-xs text-gray-400 mb-1">Credenciais de teste:</p>
-          <p className="text-xs text-gray-400">Email: juninho@gmail.com | Senha: 123456</p>
-          <p className="text-xs text-gray-400">Email: admin@adega.com | Senha: admin123</p>
+          <p className="text-xs text-gray-400">📧 juninho@gmail.com | 🔑 123456</p>
+          <p className="text-xs text-gray-400">📧 admin@adega.com | 🔑 admin123</p>
         </div>
       </div>
     </div>
