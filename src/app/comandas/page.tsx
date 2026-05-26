@@ -33,9 +33,11 @@ export default function ComandasPage() {
   const [loading, setLoading] = useState(true)
   const [modalComanda, setModalComanda] = useState(false)
   const [modalProdutos, setModalProdutos] = useState<Comanda | null>(null)
+  const [modalPagamento, setModalPagamento] = useState(false)
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [itens, setItens] = useState<ItemComanda[]>([])
   const [novaMesa, setNovaMesa] = useState('')
+  const [pagamentoSelecionado, setPagamentoSelecionado] = useState('')
 
   useEffect(() => { 
     carregarComandas() 
@@ -54,18 +56,12 @@ export default function ComandasPage() {
   }
 
   async function carregarItens(commandId: string) {
-    console.log('Carregando itens para comanda:', commandId)
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('command_items')
       .select('*, products(name, price)')
       .eq('command_id', commandId)
     
-    if (error) {
-      console.error('Erro ao carregar itens:', error)
-    } else {
-      console.log('Itens carregados:', data)
-      setItens(data as ItemComanda[])
-    }
+    if (data) setItens(data as ItemComanda[])
   }
 
   async function criarComanda() {
@@ -74,7 +70,7 @@ export default function ComandasPage() {
       return 
     }
     
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('commands')
       .insert({ 
         table_number: novaMesa, 
@@ -82,12 +78,8 @@ export default function ComandasPage() {
         total: 0, 
         company_id: 'dfb78f16-530b-4b20-8c26-5f9a4fb972c8' 
       })
-      .select()
     
-    if (error) {
-      console.error('Erro ao criar comanda:', error)
-      alert('Erro ao criar comanda: ' + error.message)
-    } else {
+    if (!error) {
       setModalComanda(false)
       setNovaMesa('')
       carregarComandas()
@@ -95,34 +87,20 @@ export default function ComandasPage() {
   }
 
   async function adicionarProduto(commandId: string, product: Produto) {
-    console.log('Adicionando produto:', product.name, 'à comanda:', commandId)
-    
-    // Verificar se já existe na comanda
-    const { data: existing, error: searchError } = await supabase
+    const { data: existing } = await supabase
       .from('command_items')
       .select('*')
       .eq('command_id', commandId)
       .eq('product_id', product.id)
       .maybeSingle()
     
-    if (searchError) {
-      console.error('Erro ao buscar item existente:', searchError)
-    }
-    
     if (existing) {
-      // Atualizar quantidade
-      const { error: updateError } = await supabase
+      await supabase
         .from('command_items')
         .update({ quantity: existing.quantity + 1 })
         .eq('id', existing.id)
-      
-      if (updateError) {
-        console.error('Erro ao atualizar quantidade:', updateError)
-        alert('Erro ao adicionar produto: ' + updateError.message)
-      }
     } else {
-      // Inserir novo item
-      const { error: insertError } = await supabase
+      await supabase
         .from('command_items')
         .insert({ 
           command_id: commandId, 
@@ -130,34 +108,16 @@ export default function ComandasPage() {
           quantity: 1, 
           price: product.price 
         })
-      
-      if (insertError) {
-        console.error('Erro ao inserir item:', insertError)
-        alert('Erro ao adicionar produto: ' + insertError.message)
-      }
     }
     
-    // Atualizar total da comanda
     await atualizarTotalComanda(commandId)
-    
-    // Recarregar itens se o modal estiver aberto
-    if (modalProdutos) {
-      await carregarItens(commandId)
-    }
+    if (modalProdutos) await carregarItens(commandId)
   }
 
   async function removerItem(itemId: string, commandId: string) {
-    const { error } = await supabase.from('command_items').delete().eq('id', itemId)
-    
-    if (error) {
-      console.error('Erro ao remover item:', error)
-      alert('Erro ao remover item: ' + error.message)
-    }
-    
+    await supabase.from('command_items').delete().eq('id', itemId)
     await atualizarTotalComanda(commandId)
-    if (modalProdutos) {
-      await carregarItens(commandId)
-    }
+    if (modalProdutos) await carregarItens(commandId)
   }
 
   async function atualizarTotalComanda(commandId: string) {
@@ -167,7 +127,6 @@ export default function ComandasPage() {
       .eq('command_id', commandId)
     
     const total = items?.reduce((sum, i) => sum + (i.price * i.quantity), 0) || 0
-    
     await supabase.from('commands').update({ total }).eq('id', commandId)
     carregarComandas()
   }
@@ -177,21 +136,35 @@ export default function ComandasPage() {
       alert('Adicione produtos à comanda primeiro!') 
       return 
     }
-    
-    const formaPagamento = prompt('Forma de pagamento:\n1 - Dinheiro\n2 - Cartão Crédito\n3 - Cartão Débito\n4 - PIX', '1')
-    let paymentMethod = ''
-    if (formaPagamento === '1') paymentMethod = 'dinheiro'
-    else if (formaPagamento === '2') paymentMethod = 'cartao_credito'
-    else if (formaPagamento === '3') paymentMethod = 'cartao_debito'
-    else if (formaPagamento === '4') paymentMethod = 'pix'
-    else { alert('Pagamento cancelado'); return }
+    setModalPagamento(true)
+  }
+
+  async function confirmarPagamento() {
+    if (!pagamentoSelecionado) {
+      alert('Selecione uma forma de pagamento')
+      return
+    }
+
+    const comanda = modalProdutos!
     
     // Registrar venda
-    const { data: venda } = await supabase.from('vendas').insert({ 
-      company_id: 'dfb78f16-530b-4b20-8c26-5f9a4fb972c8', 
-      total: comanda.total, 
-      payment_method: paymentMethod 
-    }).select().single()
+    const { data: venda, error: vendaError } = await supabase
+      .from('vendas')
+      .insert({ 
+        company_id: 'dfb78f16-530b-4b20-8c26-5f9a4fb972c8', 
+        total: comanda.total, 
+        payment_method: pagamentoSelecionado,
+        status: 'concluida',
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single()
+    
+    if (vendaError) {
+      console.error('Erro ao registrar venda:', vendaError)
+      alert('Erro ao registrar venda: ' + vendaError.message)
+      return
+    }
     
     // Registrar itens da venda e atualizar estoque
     for (const item of itens) {
@@ -212,11 +185,23 @@ export default function ComandasPage() {
     // Fechar comanda
     await supabase.from('commands').update({ status: 'fechada' }).eq('id', comanda.id)
     
-    alert('Venda finalizada! Total: R$ ' + comanda.total.toFixed(2) + '\nForma de pagamento: ' + paymentMethod)
+    const pagamentoNome = {
+      dinheiro: 'Dinheiro',
+      cartao_credito: 'Cartão Crédito',
+      cartao_debito: 'Cartão Débito',
+      pix: 'PIX'
+    }[pagamentoSelecionado]
+    
+    alert('Venda finalizada!\nTotal: R$ ' + comanda.total.toFixed(2) + '\nPagamento: ' + pagamentoNome)
+    
+    setModalPagamento(false)
     setModalProdutos(null)
+    setPagamentoSelecionado('')
     carregarComandas()
     router.push('/caixa')
   }
+
+  const totalItens = itens.reduce((sum, i) => sum + (i.price * i.quantity), 0)
 
   if (loading) return <div className="text-center py-10">Carregando comandas...</div>
 
@@ -289,7 +274,6 @@ export default function ComandasPage() {
             </div>
             
             <div className="grid lg:grid-cols-2 gap-8">
-              {/* Lista de Produtos */}
               <div>
                 <h3 className="font-bold text-lg mb-4 text-gray-700">📦 Adicionar Produtos</h3>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
@@ -310,7 +294,6 @@ export default function ComandasPage() {
                 </div>
               </div>
               
-              {/* Itens da Comanda */}
               <div>
                 <h3 className="font-bold text-lg mb-4 text-gray-700">🛒 Itens da Comanda</h3>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
@@ -340,9 +323,7 @@ export default function ComandasPage() {
                 <div className="mt-6 pt-4 border-t border-gray-200">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-xl font-bold text-gray-700">Total:</span>
-                    <span className="text-2xl font-bold text-green-600">
-                      R$ {itens.reduce((sum, i) => sum + (i.price * i.quantity), 0).toFixed(2)}
-                    </span>
+                    <span className="text-2xl font-bold text-green-600">R$ {totalItens.toFixed(2)}</span>
                   </div>
                   <button 
                     onClick={() => finalizarComanda(modalProdutos)} 
@@ -352,6 +333,58 @@ export default function ComandasPage() {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Pagamento Bonito */}
+      {modalPagamento && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 w-96 shadow-2xl">
+            <div className="text-center mb-6">
+              <div className="text-5xl mb-3">💰</div>
+              <h2 className="text-2xl font-bold text-gray-800">Forma de Pagamento</h2>
+              <p className="text-gray-500 mt-1">Total: <span className="font-bold text-green-600">R$ {totalItens.toFixed(2)}</span></p>
+            </div>
+            
+            <div className="space-y-3">
+              <button 
+                onClick={() => setPagamentoSelecionado('dinheiro')}
+                className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'dinheiro' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
+              >
+                <div className="flex items-center gap-3"><span className="text-2xl">💵</span><span className="font-medium">Dinheiro</span></div>
+                {pagamentoSelecionado === 'dinheiro' && <span className="text-green-500 text-xl">✓</span>}
+              </button>
+              
+              <button 
+                onClick={() => setPagamentoSelecionado('cartao_credito')}
+                className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'cartao_credito' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
+              >
+                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão Crédito</span></div>
+                {pagamentoSelecionado === 'cartao_credito' && <span className="text-green-500 text-xl">✓</span>}
+              </button>
+              
+              <button 
+                onClick={() => setPagamentoSelecionado('cartao_debito')}
+                className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'cartao_debito' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
+              >
+                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão Débito</span></div>
+                {pagamentoSelecionado === 'cartao_debito' && <span className="text-green-500 text-xl">✓</span>}
+              </button>
+              
+              <button 
+                onClick={() => setPagamentoSelecionado('pix')}
+                className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'pix' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
+              >
+                <div className="flex items-center gap-3"><span className="text-2xl">📱</span><span className="font-medium">PIX</span></div>
+                {pagamentoSelecionado === 'pix' && <span className="text-green-500 text-xl">✓</span>}
+              </button>
+            </div>
+            
+            <div className="flex gap-3 mt-6">
+              <button onClick={confirmarPagamento} className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition">Confirmar Pagamento</button>
+              <button onClick={() => { setModalPagamento(false); setPagamentoSelecionado('') }} className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-xl transition">Cancelar</button>
             </div>
           </div>
         </div>
