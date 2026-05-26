@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
@@ -63,7 +63,7 @@ export default function ProdutosPage() {
                 R$ {produto.price.toFixed(2)}
               </p>
               <div className="flex justify-between items-center mt-4">
-                <span className={px-2 py-1 rounded text-sm }>
+                <span className="px-2 py-1 rounded text-sm bg-green-100 text-green-700">
                   Estoque: {produto.stock}
                 </span>
                 <button className="text-amber-600 hover:text-amber-800 font-medium">
