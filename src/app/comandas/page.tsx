@@ -131,7 +131,7 @@ export default function ComandasPage() {
     carregarComandas()
   }
 
-  async function finalizarComanda(comanda: Comanda) {
+  async function abrirModalPagamento() {
     if (itens.length === 0) { 
       alert('Adicione produtos à comanda primeiro!') 
       return 
@@ -192,7 +192,7 @@ export default function ComandasPage() {
       pix: 'PIX'
     }[pagamentoSelecionado]
     
-    alert('Venda finalizada!\nTotal: R$ ' + comanda.total.toFixed(2) + '\nPagamento: ' + pagamentoNome)
+    alert('✅ Venda finalizada!\nTotal: R$ ' + comanda.total.toFixed(2) + '\nPagamento: ' + pagamentoNome)
     
     setModalPagamento(false)
     setModalProdutos(null)
@@ -326,7 +326,7 @@ export default function ComandasPage() {
                     <span className="text-2xl font-bold text-green-600">R$ {totalItens.toFixed(2)}</span>
                   </div>
                   <button 
-                    onClick={() => finalizarComanda(modalProdutos)} 
+                    onClick={abrirModalPagamento} 
                     className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition text-lg"
                   >
                     💰 Fechar Comanda e Finalizar Venda
@@ -338,14 +338,14 @@ export default function ComandasPage() {
         </div>
       )}
 
-      {/* Modal de Pagamento Bonito */}
+      {/* Modal de Pagamento Bonito - Igual ao do PDV */}
       {modalPagamento && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 w-96 shadow-2xl">
             <div className="text-center mb-6">
               <div className="text-5xl mb-3">💰</div>
               <h2 className="text-2xl font-bold text-gray-800">Forma de Pagamento</h2>
-              <p className="text-gray-500 mt-1">Total: <span className="font-bold text-green-600">R$ {totalItens.toFixed(2)}</span></p>
+              <p className="text-gray-500 mt-1">Total: <span className="font-bold text-green-600 text-xl">R$ {totalItens.toFixed(2)}</span></p>
             </div>
             
             <div className="space-y-3">
@@ -361,7 +361,7 @@ export default function ComandasPage() {
                 onClick={() => setPagamentoSelecionado('cartao_credito')}
                 className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'cartao_credito' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
               >
-                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão Crédito</span></div>
+                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão de Crédito</span></div>
                 {pagamentoSelecionado === 'cartao_credito' && <span className="text-green-500 text-xl">✓</span>}
               </button>
               
@@ -369,7 +369,7 @@ export default function ComandasPage() {
                 onClick={() => setPagamentoSelecionado('cartao_debito')}
                 className={'w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all ' + (pagamentoSelecionado === 'cartao_debito' ? 'border-green-500 bg-green-50' : 'border-gray-200 hover:border-amber-300')}
               >
-                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão Débito</span></div>
+                <div className="flex items-center gap-3"><span className="text-2xl">💳</span><span className="font-medium">Cartão de Débito</span></div>
                 {pagamentoSelecionado === 'cartao_debito' && <span className="text-green-500 text-xl">✓</span>}
               </button>
               
@@ -383,7 +383,7 @@ export default function ComandasPage() {
             </div>
             
             <div className="flex gap-3 mt-6">
-              <button onClick={confirmarPagamento} className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition">Confirmar Pagamento</button>
+              <button onClick={confirmarPagamento} disabled={!pagamentoSelecionado} className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed">Confirmar Pagamento</button>
               <button onClick={() => { setModalPagamento(false); setPagamentoSelecionado('') }} className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-3 rounded-xl transition">Cancelar</button>
             </div>
           </div>
