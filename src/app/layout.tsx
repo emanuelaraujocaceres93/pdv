@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 import './globals.css'
 
 export default function RootLayout({
@@ -13,23 +13,23 @@ export default function RootLayout({
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <Link href="/" className="text-2xl font-bold hover:text-amber-200 transition">
-                ðŸ· Adega do Juninho
+                🍷 Adega do Juninho
               </Link>
               <nav className="flex gap-4 flex-wrap">
                 <Link href="/" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
-                  ðŸ“Š Dashboard
+                  📊 Dashboard
                 </Link>
                 <Link href="/pdv" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
-                  ðŸ›’ PDV
+                  🛒 PDV
                 </Link>
                 <Link href="/comandas" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
-                  ðŸ“‹ Comandas
+                  📋 Comandas
                 </Link>
                 <Link href="/produtos" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
-                  ðŸ· Produtos
+                  🍷 Produtos
                 </Link>
                 <Link href="/caixa" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
-                  ðŸ’° Caixa
+                  💰 Caixa
                 </Link>
               </nav>
             </div>
@@ -41,7 +41,7 @@ export default function RootLayout({
         </main>
 
         <footer className="bg-amber-800 text-amber-200 text-center py-4 mt-8">
-          <p>Â© 2026 Adega do Juninho - Sistema de PDV</p>
+          <p>© 2026 Adega do Juninho - Sistema de PDV</p>
         </footer>
       </body>
     </html>
