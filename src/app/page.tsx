@@ -2,28 +2,53 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white/90 p-8 shadow-sm shadow-slate-200/40">
-      <section className="space-y-6">
-        <div>
-          <p className="text-sm uppercase tracking-[0.24em] text-slate-500">Bem-vindo ao PDV</p>
-          <h1 className="mt-3 text-4xl font-semibold text-slate-950 sm:text-5xl">Sistema híbrido PDV + Comandas</h1>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
-            Gestão de vendas, comandas e estoque para adegas. Configure sua conta Supabase, preencha as variáveis de ambiente e comece a operar.
+    <div>
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-gradient-to-r from-amber-700 to-amber-800 rounded-2xl p-8 text-white">
+          <p className="text-sm uppercase tracking-wide opacity-80">Bem-vindo ao PDV</p>
+          <h1 className="mt-3 text-3xl font-bold">Adega do Emanuel</h1>
+          <p className="mt-4 text-amber-100">
+            Sistema híbrido PDV + Comandas para gestão de vendas, comandas e estoque.
           </p>
         </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Link href="/pdv" className="rounded-2xl border border-slate-200 bg-slate-100 px-6 py-5 text-left transition hover:bg-slate-200">
-            <h2 className="text-lg font-semibold">Vender no PDV</h2>
-            <p className="mt-2 text-sm text-slate-600">Abra o ponto de venda e adicione produtos ao carrinho.</p>
-          </Link>
-
-          <Link href="/comandas" className="rounded-2xl border border-slate-200 bg-slate-100 px-6 py-5 text-left transition hover:bg-slate-200">
-            <h2 className="text-lg font-semibold">Comandas</h2>
-            <p className="mt-2 text-sm text-slate-600">Gerencie comandas abertas, consulte detalhes e feche pedidos.</p>
-          </Link>
+        
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-amber-100">
+          <div className="flex items-center gap-4 mb-4">
+            <span className="text-4xl">📊</span>
+            <div>
+              <p className="text-sm text-gray-500">Vendas Hoje</p>
+              <p className="text-2xl font-bold text-green-600">R$ 0,00</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-4xl">📋</span>
+            <div>
+              <p className="text-sm text-gray-500">Comandas Abertas</p>
+              <p className="text-2xl font-bold text-amber-700">0</p>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Link href="/pdv" className="group rounded-2xl border border-amber-200 bg-white p-6 text-left transition hover:shadow-lg hover:border-amber-300">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-3xl">🛒</span>
+            <h2 className="text-xl font-semibold text-amber-800">Vender no PDV</h2>
+          </div>
+          <p className="text-sm text-gray-600">Abra o ponto de venda e adicione produtos ao carrinho.</p>
+          <span className="inline-block mt-4 text-amber-600 group-hover:translate-x-1 transition">→</span>
+        </Link>
+
+        <Link href="/comandas" className="group rounded-2xl border border-amber-200 bg-white p-6 text-left transition hover:shadow-lg hover:border-amber-300">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-3xl">📋</span>
+            <h2 className="text-xl font-semibold text-amber-800">Comandas</h2>
+          </div>
+          <p className="text-sm text-gray-600">Gerencie comandas abertas, consulte detalhes e feche pedidos.</p>
+          <span className="inline-block mt-4 text-amber-600 group-hover:translate-x-1 transition">→</span>
+        </Link>
+      </div>
     </div>
   );
 }
