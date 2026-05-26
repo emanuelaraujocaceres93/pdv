@@ -10,33 +10,72 @@ interface Venda {
   created_at: string
 }
 
+interface Movimentacao {
+  id: string
+  tipo: string
+  valor: number
+  descricao: string
+  created_at: string
+}
+
 export default function CaixaPage() {
   const [vendas, setVendas] = useState<Venda[]>([])
+  const [movimentacoes, setMovimentacoes] = useState<Movimentacao[]>([])
   const [loading, setLoading] = useState(true)
+  const [modalRetirada, setModalRetirada] = useState(false)
+  const [valorRetirada, setValorRetirada] = useState('')
+  const [descricaoRetirada, setDescricaoRetirada] = useState('')
 
-  useEffect(() => { carregarVendas() }, [])
+  useEffect(() => { carregarDados() }, [])
 
-  async function carregarVendas() {
-    const { data } = await supabase.from('vendas').select('*').order('created_at', { ascending: false })
-    if (data) setVendas(data)
+  async function carregarDados() {
+    const { data: vendasData } = await supabase.from('vendas').select('*').order('created_at', { ascending: false })
+    const { data: movData } = await supabase.from('movimentacoes_caixa').select('*').order('created_at', { ascending: false })
+    if (vendasData) setVendas(vendasData)
+    if (movData) setMovimentacoes(movData)
     setLoading(false)
   }
 
+  async function fazerRetirada() {
+    if (!valorRetirada || parseFloat(valorRetirada) <= 0) {
+      alert('Digite um valor válido')
+      return
+    }
+
+    await supabase.from('movimentacoes_caixa').insert({
+      tipo: 'retirada',
+      valor: parseFloat(valorRetirada),
+      descricao: descricaoRetirada || 'Retirada de caixa'
+    })
+
+    setModalRetirada(false)
+    setValorRetirada('')
+    setDescricaoRetirada('')
+    carregarDados()
+    alert('Retirada registrada com sucesso!')
+  }
+
   const totalVendas = vendas.reduce((sum, v) => sum + v.total, 0)
-  const totalDinheiro = vendas.filter(v => v.payment_method === 'dinheiro').reduce((sum, v) => sum + v.total, 0)
-  const totalCartao = vendas.filter(v => v.payment_method === 'cartao_credito' || v.payment_method === 'cartao_debito').reduce((sum, v) => sum + v.total, 0)
-  const totalPix = vendas.filter(v => v.payment_method === 'pix').reduce((sum, v) => sum + v.total, 0)
+  const totalRetiradas = movimentacoes.filter(m => m.tipo === 'retirada').reduce((sum, m) => sum + m.valor, 0)
+  const saldoAtual = totalVendas - totalRetiradas
 
   if (loading) return <div className="text-center py-10">Carregando...</div>
 
   return (
     <div><h1 className="text-3xl font-bold text-amber-800 mb-6">💰 Caixa</h1>
-      <div className="grid lg:grid-cols-2 gap-6"><div className="bg-white rounded-xl shadow-lg p-6"><h2 className="text-xl font-bold mb-4">📊 Resumo do Dia</h2>
-        <div className="space-y-3"><div className="flex justify-between py-2 border-b"><span>Total de Vendas:</span><span className="font-bold text-green-600">R$ {totalVendas.toFixed(2)}</span></div>
-        <div className="flex justify-between py-2 border-b"><span>Dinheiro:</span><span>R$ {totalDinheiro.toFixed(2)}</span></div>
-        <div className="flex justify-between py-2 border-b"><span>Cartão:</span><span>R$ {totalCartao.toFixed(2)}</span></div>
-        <div className="flex justify-between py-2 border-b"><span>PIX:</span><span>R$ {totalPix.toFixed(2)}</span></div>
-        <div className="flex justify-between py-3 bg-amber-50 rounded-lg px-4"><span className="font-bold">Saldo do Dia:</span><span className="font-bold text-green-600">R$ {totalVendas.toFixed(2)}</span></div></div></div>
-        <div className="bg-white rounded-xl shadow-lg p-6"><h2 className="text-xl font-bold mb-4">📋 Últimas Vendas</h2><div className="space-y-2">{vendas.slice(0, 5).map(v => (<div key={v.id} className="p-3 bg-gray-50 rounded-lg"><div className="flex justify-between"><span className="font-bold text-green-600">R$ {v.total.toFixed(2)}</span><span className="text-xs text-gray-500">{new Date(v.created_at).toLocaleString()}</span></div><div className="text-xs text-gray-400 mt-1">Pagamento: {v.payment_method}</div></div>))}</div></div></div></div>
+      <div className="flex flex-col lg:flex-row gap-6 mb-6">
+        <div className="flex-1 bg-white rounded-xl shadow-lg p-6"><h2 className="text-xl font-bold mb-4">📊 Resumo do Caixa</h2>
+          <div className="space-y-3"><div className="flex justify-between py-2 border-b"><span>Total de Vendas:</span><span className="font-bold text-green-600">R$ {totalVendas.toFixed(2)}</span></div>
+          <div className="flex justify-between py-2 border-b"><span>Total de Retiradas:</span><span className="font-bold text-red-600">R$ {totalRetiradas.toFixed(2)}</span></div>
+          <div className="flex justify-between py-3 bg-amber-50 rounded-lg px-4 -mx-4"><span className="font-bold">Saldo Atual:</span><span className="font-bold text-green-600 text-xl">R$ {saldoAtual.toFixed(2)}</span></div></div>
+          <button onClick={() => setModalRetirada(true)} className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg transition">Retirar Dinheiro</button>
+        </div>
+        <div className="flex-1 bg-white rounded-xl shadow-lg p-6"><h2 className="text-xl font-bold mb-4">📋 Últimas Movimentações</h2><div className="space-y-2 max-h-[300px] overflow-y-auto">{movimentacoes.slice(0, 10).map(m => (<div key={m.id} className="p-3 bg-gray-50 rounded-lg"><div className="flex justify-between"><span className={m.tipo === 'venda' ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>{m.tipo === 'venda' ? 'Venda' : 'Retirada'}</span><span className={m.tipo === 'venda' ? 'text-green-600' : 'text-red-600'}>R$ {m.valor.toFixed(2)}</span></div><div className="text-xs text-gray-500 mt-1">{new Date(m.created_at).toLocaleString()} - {m.descricao}</div></div>))}</div></div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-lg p-6"><h2 className="text-xl font-bold mb-4">📋 Últimas Vendas</h2><div className="space-y-2 max-h-[300px] overflow-y-auto">{vendas.slice(0, 10).map(v => (<div key={v.id} className="p-3 bg-gray-50 rounded-lg"><div className="flex justify-between"><span className="font-bold text-green-600">R$ {v.total.toFixed(2)}</span><span className="text-xs text-gray-500">{new Date(v.created_at).toLocaleString()}</span></div><div className="text-xs text-gray-400 mt-1">Pagamento: {v.payment_method}</div></div>))}</div></div>
+
+      {modalRetirada && (<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"><div className="bg-white rounded-2xl p-6 w-96"><h2 className="text-xl font-bold text-amber-800 mb-4">💰 Retirar Dinheiro</h2><input type="number" placeholder="Valor" value={valorRetirada} onChange={e => setValorRetirada(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-3" /><input type="text" placeholder="Descrição (opcional)" value={descricaoRetirada} onChange={e => setDescricaoRetirada(e.target.value)} className="w-full border rounded-lg px-4 py-2 mb-4" /><div className="flex gap-3"><button onClick={fazerRetirada} className="flex-1 bg-red-600 text-white py-2 rounded-lg">Confirmar</button><button onClick={() => setModalRetirada(false)} className="flex-1 bg-gray-300 py-2 rounded-lg">Cancelar</button></div></div></div>)}
+    </div>
   )
 }

@@ -164,6 +164,13 @@ export default function ComandasPage() {
       return
     }
     
+    // Registrar movimentação de caixa
+    await supabase.from('movimentacoes_caixa').insert({
+      tipo: 'venda',
+      valor: comanda.total,
+      descricao: 'Venda comanda ' + comanda.table_number
+    })
+    
     for (const item of itens) {
       await supabase.from('vendas_itens').insert({ 
         venda_id: venda.id, 
@@ -246,14 +253,14 @@ export default function ComandasPage() {
 
       {modalProdutos && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
-          <div className="bg-white rounded-xl p-6 w-full max-w-5xl max-h-[90vh] overflow-y-auto m-4">
+          <div className="bg-white rounded-xl p-6 w-full max-w-6xl max-h-[90vh] overflow-y-auto m-4">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-amber-800">Comanda: {modalProdutos.table_number}</h2>
               <button onClick={() => setModalProdutos(null)} className="text-gray-500 text-3xl">&times;</button>
             </div>
             
-            <div className="grid lg:grid-cols-2 gap-8">
-              <div>
+            <div className="flex flex-col lg:flex-row gap-6">
+              <div className="flex-1">
                 <h3 className="font-bold text-lg mb-4">📦 Adicionar Produtos</h3>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                   {produtos.map(p => (
@@ -268,14 +275,14 @@ export default function ComandasPage() {
                 </div>
               </div>
               
-              <div>
+              <div className="flex-1">
                 <h3 className="font-bold text-lg mb-4">🛒 Itens da Comanda</h3>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                   {itens.length === 0 ? <p className="text-gray-400 text-center py-8">Nenhum item adicionado</p> : itens.map(item => (
                     <div key={item.id} className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
                       <div>
                         <p className="font-medium">{item.products.name}</p>
-                        <p className="text-sm">{item.quantity}x R$ {item.price.toFixed(2)} = R$ {(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-sm">{item.quantity}x R$ {item.price.toFixed(2)} = <span className="font-semibold text-green-600">R$ {(item.price * item.quantity).toFixed(2)}</span></p>
                       </div>
                       <button onClick={() => removerItem(item.id, modalProdutos.id)} className="text-red-500">Remover</button>
                     </div>
