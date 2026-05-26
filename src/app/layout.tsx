@@ -1,4 +1,4 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 import './globals.css'
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <Link href="/dashboard" className="text-2xl font-bold hover:text-amber-200 transition">
-                🍷 Adega do Emanuel
+                🍷 Adega do Juninho
               </Link>
               <nav className="flex gap-4 flex-wrap">
                 <Link href="/dashboard" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
@@ -28,9 +28,6 @@ export default function RootLayout({
                 <Link href="/produtos" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
                   🍷 Produtos
                 </Link>
-                <Link href="/estoque" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
-                  📦 Estoque
-                </Link>
                 <Link href="/caixa" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
                   💰 Caixa
                 </Link>
@@ -44,7 +41,7 @@ export default function RootLayout({
         </main>
 
         <footer className="bg-amber-800 text-amber-200 text-center py-4 mt-8">
-          <p>© 2026 Adega do Emanuel - Sistema de PDV</p>
+          <p>© 2026 Adega do Juninho - Sistema de PDV</p>
         </footer>
       </body>
     </html>
