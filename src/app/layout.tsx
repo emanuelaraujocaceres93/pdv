@@ -1,67 +1,52 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "PDV Adega",
-  description: "Sistema híbrido de PDV e comandas para adegas.",
-};
-
-const navItems = [
-  { href: "/pdv", label: "PDV" },
-  { href: "/comandas", label: "Comandas" },
-  { href: "/estoque", label: "Estoque" },
-  { href: "/produtos", label: "Produtos" },
-  { href: "/caixa", label: "Caixa" },
-  { href: "/dashboard", label: "Dashboard" },
-];
+﻿import Link from 'next/link'
+import './globals.css'
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-slate-50 text-slate-900`}
-    >
-      <body className="min-h-screen bg-slate-50 text-slate-900">
-        <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8">
-          <header className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-sm shadow-slate-200/40 backdrop-blur-xl">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-slate-500">PDV + Comandas</p>
-                <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">Sistema de vendas para adega</h1>
-              </div>
-              <nav className="flex flex-wrap items-center gap-2">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded-full border border-slate-200 bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-200"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+    <html lang="pt-BR">
+      <body className="bg-amber-50">
+        <header className="bg-amber-800 text-white shadow-lg sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <Link href="/dashboard" className="text-2xl font-bold hover:text-amber-200 transition">
+                🍷 Adega do Emanuel
+              </Link>
+              <nav className="flex gap-4 flex-wrap">
+                <Link href="/dashboard" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
+                  📊 Dashboard
+                </Link>
+                <Link href="/pdv" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
+                  🛒 PDV
+                </Link>
+                <Link href="/comandas" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
+                  📋 Comandas
+                </Link>
+                <Link href="/produtos" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
+                  🍷 Produtos
+                </Link>
+                <Link href="/estoque" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
+                  📦 Estoque
+                </Link>
+                <Link href="/caixa" className="hover:text-amber-200 transition px-3 py-1 rounded hover:bg-amber-700">
+                  💰 Caixa
+                </Link>
               </nav>
             </div>
-          </header>
+          </div>
+        </header>
 
-          <main className="mb-10 flex-1">{children}</main>
-        </div>
+        <main className="container mx-auto px-4 py-8 min-h-screen">
+          {children}
+        </main>
+
+        <footer className="bg-amber-800 text-amber-200 text-center py-4 mt-8">
+          <p>© 2026 Adega do Emanuel - Sistema de PDV</p>
+        </footer>
       </body>
     </html>
-  );
+  )
 }
